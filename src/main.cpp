@@ -10,31 +10,33 @@ struct coordinates_vector {
   double point_B = 0;
 };
 
-std::vector<double> vec_add(std::vector<coordinates_vector>& vec) {
-  std::vector<double> result_A_B;
-  result_A_B.push_back(vec[0].point_A + vec[0].point_B);
-  result_A_B.push_back(vec[1].point_A + vec[1].point_B);
-  return result_A_B;
+coordinates_vector vec_add(coordinates_vector vec_1, coordinates_vector vec_2) {
+  coordinates_vector vec;
+  vec.point_A = vec_1.point_A + vec_2.point_A;
+  vec.point_B = vec_1.point_B + vec_2.point_B;
+  return vec;
 }
 
-std::vector<double> vec_subtract(std::vector<coordinates_vector>& vec) {
-  std::vector<double> result_A_B;
-  result_A_B.push_back(vec[0].point_A - vec[0].point_B);
-  result_A_B.push_back(vec[1].point_A - vec[1].point_B);
-  return result_A_B;
+coordinates_vector vec_subtract(coordinates_vector vec_1, coordinates_vector vec_2) {
+  coordinates_vector vec;
+  vec.point_A = vec_1.point_A - vec_2.point_A;
+  vec.point_B = vec_1.point_B - vec_2.point_B;
+  return vec;
 }
 
-std::vector<double> vec_scale(std::vector<coordinates_vector>& vec, double& scale) {
-  std::vector<double> result_scale_A_B;
-  result_scale_A_B.push_back(std::abs(vec[0].point_A) * scale);
-  result_scale_A_B.push_back(std::abs(vec[1].point_B) * scale);
-  return result_scale_A_B;
+coordinates_vector vec_scale(coordinates_vector vec_1, double& scale) {
+  coordinates_vector vec;
+  vec.point_A = vec_1.point_A * scale;
+  vec.point_B = vec_1.point_B * scale;
+  return vec;
 }
 
-double vec_length(std::vector<coordinates_vector>& vec) {
-  double result_length = std::sqrt(std::pow((vec[1].point_A - vec[0].point_A), 2) + std::pow((vec[1].point_B - vec[0].point_B), 2));
+double vec_length(coordinates_vector point_vec_1, coordinates_vector point_vec_2) {
+  double result_length = std::sqrt(std::pow((point_vec_2.point_A - point_vec_1.point_A), 2) + std::pow((point_vec_2.point_B - point_vec_1.point_B), 2));
   return result_length;
 }
+
+// void vec_normalize() {}
 
 void filling_vector(std::vector<coordinates_vector>& tmp_vector, int countVec) {
   double Ax, Ay;
@@ -44,8 +46,6 @@ void filling_vector(std::vector<coordinates_vector>& tmp_vector, int countVec) {
     tmp_vector.push_back({Ax, Ay});
   }
 }
-
-void vec_normalize() {}
 
 struct math_command {
   const std::string add = "add";
@@ -63,34 +63,52 @@ int main() {
   double scale;
   double Ax;
   double Ay;
-  std::vector<coordinates_vector> tmp_vector;
+  // std::vector<coordinates_vector> tmp_vector;
+  coordinates_vector tmp_vector_1;
+  coordinates_vector tmp_vector_2;
+
   std::cout << "Enter the command over the vector" << std::endl;
   std::cin >> command;
   if (command == math_command.add) {
     countVec = 2;
-    filling_vector(tmp_vector, countVec);
-    std::cout << "Summ vec = " << vec_add(tmp_vector)[0] << " and " << vec_add(tmp_vector)[1] << std::endl;
+    // filling_vector(tmp_vector, countVec);
+    std::cout << "Enter first vector coordinates" << std::endl;
+    std::cin >> tmp_vector_1.point_A >> tmp_vector_1.point_B;
+    std::cout << "Enter second vector coordinates" << std::endl;
+    std::cin >> tmp_vector_2.point_A >> tmp_vector_2.point_B;
+    std::cout << "Summ vec = " << vec_add(tmp_vector_1, tmp_vector_2).point_A << " and " << vec_add(tmp_vector_1, tmp_vector_2).point_B << std::endl;
   } else if (command == math_command.subtract) {
     countVec = 2;
-    filling_vector(tmp_vector, countVec);
-    std::cout << "Subtract vec = " << vec_subtract(tmp_vector)[0] << " and " << vec_subtract(tmp_vector)[1] << std::endl;
+    // filling_vector(tmp_vector, countVec);
+    std::cout << "Enter first vector coordinates" << std::endl;
+    std::cin >> tmp_vector_1.point_A >> tmp_vector_1.point_B;
+    std::cout << "Enter second vector coordinates" << std::endl;
+    std::cin >> tmp_vector_2.point_A >> tmp_vector_2.point_B;
+    std::cout << "Subtract vec = " << vec_add(tmp_vector_1, tmp_vector_2).point_A << " and " << vec_add(tmp_vector_1, tmp_vector_2).point_B << std::endl;
   } else if (command == math_command.scale) {
     countVec = 1;
-    std::cout << "Enter vector coordinates" << std::endl;
-    std::cin >> Ax >> Ay;
-    tmp_vector.push_back({Ax, Ay});
+    std::cout << "Enter first vector coordinates" << std::endl;
+    std::cin >> tmp_vector_1.point_A >> tmp_vector_1.point_B;
     std::cout << "Enter the scale" << std::endl;
     std::cin >> scale;
-    std::cout << "Scale vec = " << vec_scale(tmp_vector, scale)[0] << " and " << vec_scale(tmp_vector, scale)[1] << std::endl;
+    std::cout << "Scale vec = " << vec_scale(tmp_vector_1, scale).point_A << " and " << vec_scale(tmp_vector_1, scale).point_B << std::endl;
   } else if (command == math_command.length) {
     countVec = 2;
-    filling_vector(tmp_vector, countVec);
-    std::cout << "Length vec = " << vec_length(tmp_vector) << std::endl;
+    // filling_vector(tmp_vector, countVec);
+    std::cout << "Enter point first vector coordinates" << std::endl;
+    std::cin >> tmp_vector_1.point_A >> tmp_vector_1.point_B;
+    std::cout << "Enter point second vector coordinates" << std::endl;
+    std::cin >> tmp_vector_2.point_A >> tmp_vector_2.point_B;
+    std::cout << "Length vec = " << vec_length(tmp_vector_1, tmp_vector_2) << std::endl;
   } else if (command == math_command.normalize) {
     countVec = 2;
-    filling_vector(tmp_vector, countVec);
-    std::cout << "Normalize vec = " << tmp_vector[0].point_A / vec_length(tmp_vector) << " , " << tmp_vector[0].point_B / vec_length(tmp_vector) << " and "
-              << tmp_vector[1].point_A / vec_length(tmp_vector) << " , " << tmp_vector[1].point_B / vec_length(tmp_vector) << std::endl;
+    // filling_vector(tmp_vector, countVec);
+    std::cout << "Enter first vector coordinates" << std::endl;
+    std::cin >> tmp_vector_1.point_A >> tmp_vector_1.point_B;
+    std::cout << "Enter second vector coordinates" << std::endl;
+    std::cin >> tmp_vector_2.point_A >> tmp_vector_2.point_B;
+    std::cout << "Normalize vec = " << tmp_vector_1.point_A / vec_length(tmp_vector_1, tmp_vector_2) << " , " << tmp_vector_1.point_B / vec_length(tmp_vector_1, tmp_vector_2) << " and "
+              << tmp_vector_2.point_A / vec_length(tmp_vector_1, tmp_vector_2) << " , " << tmp_vector_2.point_B / vec_length(tmp_vector_1, tmp_vector_2) << std::endl;
   }
   return 0;
 }
