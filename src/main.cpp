@@ -36,16 +36,21 @@ double vec_length(coordinates_vector point_vec_1, coordinates_vector point_vec_2
   return result_length;
 }
 
-// void vec_normalize() {}
-
-void filling_vector(std::vector<coordinates_vector>& tmp_vector, int countVec) {
-  double Ax, Ay;
-  for (int i = 0; i < countVec; i++) {
-    std::cout << "Enter vector coordinates" << std::endl;
-    std::cin >> Ax >> Ay;
-    tmp_vector.push_back({Ax, Ay});
-  }
+coordinates_vector vec_normalize(coordinates_vector point_vec, double length) {
+  coordinates_vector vec;
+  vec.point_A = point_vec.point_A / length;
+  vec.point_B = point_vec.point_B / length;
+  return vec;
 }
+
+// void filling_vector(std::vector<coordinates_vector>& tmp_vector, int countVec) {
+//   double Ax, Ay;
+//   for (int i = 0; i < countVec; i++) {
+//     std::cout << "Enter vector coordinates" << std::endl;
+//     std::cin >> Ax >> Ay;
+//     tmp_vector.push_back({Ax, Ay});
+//   }
+// }
 
 struct math_command {
   const std::string add = "add";
@@ -61,11 +66,11 @@ int main() {
   math_command math_command;
   std::string command;
   double scale;
-  double Ax;
-  double Ay;
+  double length;
   // std::vector<coordinates_vector> tmp_vector;
   coordinates_vector tmp_vector_1;
   coordinates_vector tmp_vector_2;
+  coordinates_vector result;
 
   std::cout << "Enter the command over the vector" << std::endl;
   std::cin >> command;
@@ -76,7 +81,8 @@ int main() {
     std::cin >> tmp_vector_1.point_A >> tmp_vector_1.point_B;
     std::cout << "Enter second vector coordinates" << std::endl;
     std::cin >> tmp_vector_2.point_A >> tmp_vector_2.point_B;
-    std::cout << "Summ vec = " << vec_add(tmp_vector_1, tmp_vector_2).point_A << " and " << vec_add(tmp_vector_1, tmp_vector_2).point_B << std::endl;
+    result = vec_add(tmp_vector_1, tmp_vector_2);
+    std::cout << "Summ vec = " << result.point_A << " and " << result.point_B << std::endl;
   } else if (command == math_command.subtract) {
     countVec = 2;
     // filling_vector(tmp_vector, countVec);
@@ -84,7 +90,8 @@ int main() {
     std::cin >> tmp_vector_1.point_A >> tmp_vector_1.point_B;
     std::cout << "Enter second vector coordinates" << std::endl;
     std::cin >> tmp_vector_2.point_A >> tmp_vector_2.point_B;
-    std::cout << "Subtract vec = " << vec_add(tmp_vector_1, tmp_vector_2).point_A << " and " << vec_add(tmp_vector_1, tmp_vector_2).point_B << std::endl;
+    result = vec_subtract(tmp_vector_1, tmp_vector_2);
+    std::cout << "Subtract vec = " << result.point_A << " and " << result.point_B << std::endl;
   } else if (command == math_command.scale) {
     countVec = 1;
     std::cout << "Enter first vector coordinates" << std::endl;
@@ -99,16 +106,21 @@ int main() {
     std::cin >> tmp_vector_1.point_A >> tmp_vector_1.point_B;
     std::cout << "Enter point second vector coordinates" << std::endl;
     std::cin >> tmp_vector_2.point_A >> tmp_vector_2.point_B;
-    std::cout << "Length vec = " << vec_length(tmp_vector_1, tmp_vector_2) << std::endl;
+    length = vec_length(tmp_vector_1, tmp_vector_2);
+    std::cout << "Length vec = " << length << std::endl;
   } else if (command == math_command.normalize) {
     countVec = 2;
+    coordinates_vector vec;
+    coordinates_vector vec_2;
     // filling_vector(tmp_vector, countVec);
     std::cout << "Enter first vector coordinates" << std::endl;
     std::cin >> tmp_vector_1.point_A >> tmp_vector_1.point_B;
     std::cout << "Enter second vector coordinates" << std::endl;
     std::cin >> tmp_vector_2.point_A >> tmp_vector_2.point_B;
-    std::cout << "Normalize vec = " << tmp_vector_1.point_A / vec_length(tmp_vector_1, tmp_vector_2) << " , " << tmp_vector_1.point_B / vec_length(tmp_vector_1, tmp_vector_2) << " and "
-              << tmp_vector_2.point_A / vec_length(tmp_vector_1, tmp_vector_2) << " , " << tmp_vector_2.point_B / vec_length(tmp_vector_1, tmp_vector_2) << std::endl;
+    length = vec_length(tmp_vector_1, tmp_vector_2);
+    vec = vec_normalize(tmp_vector_1, length);
+    vec_2 = vec_normalize(tmp_vector_2, length);
+    std::cout << "Normalize vec = " << vec.point_A << " , " << vec.point_B << " and " << vec_2.point_A << " , " << vec_2.point_B << std::endl;
   }
   return 0;
 }
